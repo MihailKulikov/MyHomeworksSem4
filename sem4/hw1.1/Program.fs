@@ -1,20 +1,21 @@
 ﻿open System
 open System.Numerics
 
-let rec factorial (acc: BigInteger) (n: BigInteger): BigInteger =
-    if n = BigInteger.Zero then
-        acc
-    else
-        if n < BigInteger.Zero then
-            raise (ArgumentException "The input must be a non-negative integer")
+let factorial (n: BigInteger): BigInteger =
+    if n < BigInteger.Zero then
+        raise (ArgumentException "The input must be a non-negative integer")
+    let rec loop (n: BigInteger) (acc: BigInteger): BigInteger =
+        if n = BigInteger.Zero then
+            acc
         else
-            factorial (acc * n) (n - BigInteger.One)
+            loop (acc * n) (n - BigInteger.One)
+    loop n BigInteger.One
     
 let tryFactorial (n: BigInteger) =
     try
-        Some(factorial BigInteger.One n)
+        Some(factorial n)
     with
-    | :? ArgumentException as e -> printf $"{e.Message}"; None
+    | :? ArgumentException ->  None
     
 [<EntryPoint>]
 let main _ =
