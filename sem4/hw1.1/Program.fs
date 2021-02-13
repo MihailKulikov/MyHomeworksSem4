@@ -9,5 +9,5 @@ let rec factorial (n: UInt64): UInt64=
 let main _ =
     match Console.ReadLine() |> UInt64.TryParse with
     | true, n -> printf $"{factorial n}"
-    | _ -> printf "Input number should be a positive integer"
+    | _ -> printf "The input must be a non-negative integer."
     0
