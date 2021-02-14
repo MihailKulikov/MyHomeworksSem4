@@ -3,7 +3,7 @@ before_build:
   
 environment:
   matrix:
-  - solution_name: sem4\hw5.1\hw5.1.sln
+  - solution_name: sem4\hw1.5\hw1.5.sln
   
 build_script:
   - msbuild %solution_name%
