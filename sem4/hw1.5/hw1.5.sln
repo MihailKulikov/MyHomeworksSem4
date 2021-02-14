@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "hw5.1", "hw5.1.fsproj", "{FEA886C2-ECC8-4072-85B6-3DEF5BAE0ACC}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "hw1.5", "hw1.5.fsproj", "{FEA886C2-ECC8-4072-85B6-3DEF5BAE0ACC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
