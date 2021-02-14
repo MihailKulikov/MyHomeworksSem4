@@ -10,7 +10,7 @@ let find list item =
     
 [<EntryPoint>]
 let main _ =
-    printf "Enter a list separated by a space. \n"
+    printf "Enter a list of integers separated by a space. \n"
     let list = Console.ReadLine().Split " " |> Seq.toList |> List.map Int32.Parse
     printf "Enter a item for search. \n"
     match Console.ReadLine() |> Int32.Parse |> find list with
