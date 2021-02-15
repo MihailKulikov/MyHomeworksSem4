@@ -4,8 +4,7 @@ open System.Numerics
 let fibonacciNumbers =
     seq {
         yield! seq { BigInteger.Zero; BigInteger.One }
-        yield! (BigInteger.Zero, BigInteger.One)
-        |> Seq.unfold (fun state ->
+        yield! (BigInteger.Zero, BigInteger.One) |> Seq.unfold (fun state ->
             Some(fst state + snd state, (snd state, fst state + snd state)))}
 
 let getNthFibonacciNumber n =
