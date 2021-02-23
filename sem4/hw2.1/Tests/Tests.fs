@@ -7,11 +7,11 @@ open Program
 open System
 
 type ListProperties =
-    static member ``filtering realisation should be equivalent to folding realisation`` list =
+    static member ``filtering implementation should be equivalent to folding realisation`` list =
             (evenNumberCountFiltering list) = (evenNumberCountFolding list)
-    static member ``filtering realisation should be equivalent to mapping realisation`` list =
+    static member ``filtering implementation should be equivalent to mapping realisation`` list =
             (evenNumberCountFiltering list) = (evenNumberCountMapping list)
-    static member ``folding realisation should be equivalent to mapping realisation`` list =
+    static member ``folding implementation should be equivalent to mapping realisation`` list =
             (evenNumberCountFolding list) = (evenNumberCountMapping list)
 
 [<TestFixture("Map")>]
