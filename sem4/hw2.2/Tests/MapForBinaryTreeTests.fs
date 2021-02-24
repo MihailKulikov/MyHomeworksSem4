@@ -8,7 +8,7 @@ type Tests () =
     static member TestCaseList = [|
         Node(42, Node(1, Leaf, Leaf), Node(3, Leaf, Leaf)),
         (fun (x: int) -> x.ToString()),
-        Node("42", Node("1", Leaf, Leaf), Node("3", Leaf, Leaf));
+        Node("42", Node("1", Leaf, Leaf), Node("3", Leaf, Leaf))
         
         Leaf,
         (fun (x: int) -> x.ToString()),
@@ -16,7 +16,7 @@ type Tests () =
         
         Node(42, Node(1, Leaf, Leaf), Node(3, Leaf, Leaf)),
         (fun (x: int) -> (x + 5).ToString()),
-        Node("47", Node("6", Leaf, Leaf), Node("8", Leaf, Leaf));
+        Node("47", Node("6", Leaf, Leaf), Node("8", Leaf, Leaf))
     |]
     
     [<SetUp>]
