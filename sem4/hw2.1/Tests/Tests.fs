@@ -26,13 +26,13 @@ type Tests (realisation) =
         | _ -> raise (ArgumentException("Invalid test fixture parameter."))
         
     static member TestCaseList = [|
-        [], 0;
+        [], 0
         [42; 54], 2 
-        [-2; -1], 1;
-        [0; -0], 2;
+        [-2; -1], 1
+        [0; -0], 2
         [1; 100], 1
         [1000000; 1000000001], 1
-        [Int32.MaxValue; Int32.MinValue], 1;
+        [Int32.MaxValue; Int32.MinValue], 1
     |]
  
     [<Test>]
