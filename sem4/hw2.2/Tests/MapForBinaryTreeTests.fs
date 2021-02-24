@@ -6,17 +6,17 @@ open Program
 
 type Tests () =
     static member TestCaseList = [|
-        Node(42, Node(1, Leaf, Leaf), Node(3, Leaf, Leaf)),
+        Node(42, Node(1, Empty, Empty), Node(3, Empty, Empty)),
         (fun (x: int) -> x.ToString()),
-        Node("42", Node("1", Leaf, Leaf), Node("3", Leaf, Leaf))
+        Node("42", Node("1", Empty, Empty), Node("3", Empty, Empty))
         
-        Leaf,
+        Empty,
         (fun (x: int) -> x.ToString()),
-        Leaf
+        Empty
         
-        Node(42, Node(1, Leaf, Leaf), Node(3, Leaf, Leaf)),
+        Node(42, Node(1, Empty, Empty), Node(3, Empty, Empty)),
         (fun (x: int) -> (x + 5).ToString()),
-        Node("47", Node("6", Leaf, Leaf), Node("8", Leaf, Leaf))
+        Node("47", Node("6", Empty, Empty), Node("8", Empty, Empty))
     |]
     
     [<SetUp>]
