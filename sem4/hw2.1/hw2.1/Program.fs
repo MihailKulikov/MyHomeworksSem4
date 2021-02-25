@@ -7,7 +7,7 @@
     /// <returns>The number of even numbers in the list.</returns>
     let evenNumberCountMapping list =
         list
-        |> List.map(fun x -> if x % 2 = 0 then 1 else 0) 
+        |> List.map (fun x -> if x % 2 = 0 then 1 else 0) 
         |> List.sum
     
     /// <summary>
@@ -17,7 +17,7 @@
     /// <returns>The number of even numbers in the list.</returns>
     let evenNumberCountFiltering list =
         list
-        |> List.filter(fun x -> if x % 2 = 0 then true else false)
+        |> List.filter (fun x -> x % 2 = 0)
         |> List.length
     
     /// <summary>

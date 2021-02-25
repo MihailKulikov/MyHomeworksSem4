@@ -14,15 +14,15 @@ type ListProperties =
     static member ``folding implementation should be equivalent to mapping realisation`` list =
             (evenNumberCountFolding list) = (evenNumberCountMapping list)
 
-[<TestFixture("Map")>]
-[<TestFixture("Fold")>]
-[<TestFixture("Filter")>]
+[<TestFixture(nameof evenNumberCountMapping)>]
+[<TestFixture(nameof evenNumberCountFolding)>]
+[<TestFixture(nameof evenNumberCountFiltering)>]
 type Tests (realisation) =
     member this.evenCount =
         match realisation with
-        | "Map" -> evenNumberCountMapping
-        | "Fold" -> evenNumberCountFolding
-        | "Filter" -> evenNumberCountFiltering
+        | nameof evenNumberCountMapping -> evenNumberCountMapping
+        | nameof evenNumberCountFolding -> evenNumberCountFolding
+        | nameof evenNumberCountFiltering -> evenNumberCountFiltering
         | _ -> raise (ArgumentException("Invalid test fixture parameter."))
         
     static member TestCaseList = [|
