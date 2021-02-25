@@ -18,6 +18,6 @@ type Tests () =
         
     [<TestCaseSource(nameof(Tests.TestCases))>]
     [<Test>]
-    member this.``Evaluation should work correct`` (testCase) =
+    member this.``Evaluation should work correctly`` (testCase) =
         let expression, result = testCase
         expression |> evaluate |> should equal result
