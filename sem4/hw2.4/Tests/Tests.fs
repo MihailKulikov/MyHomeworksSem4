@@ -4,10 +4,6 @@ open NUnit.Framework
 open Program
 open FsUnit
 
-[<SetUp>]
-let Setup () =
-    ()
-
 [<TestCase(3, ExpectedResult = true)>]
 [<TestCase(97, ExpectedResult = true)>]
 [<TestCase(2, ExpectedResult = true)>]

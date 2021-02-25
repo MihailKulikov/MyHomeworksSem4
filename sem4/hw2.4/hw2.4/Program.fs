@@ -8,13 +8,13 @@ let isPrime (number: bigint) =
     else
         let upperBound = number |> float |> sqrt |> bigint
         seq { bigint(2)..upperBound }
-        |> Seq.exists(fun x -> number % x = bigint.Zero)
+        |> Seq.exists (fun x -> number % x = bigint.Zero)
         |> not
 
 /// Infinite sequence of prime numbers.
 let primes =
-    Seq.initInfinite(fun x -> bigint(x) + bigint(2))
-    |> Seq.filter(isPrime)
+    Seq.initInfinite (fun x -> bigint(x) + bigint(2))
+    |> Seq.filter isPrime
 
 [<EntryPoint>]
 let main _ =
