@@ -48,5 +48,5 @@ let rec normalReduction term =
     | Abstraction (variable, innerTerm) -> Abstraction (variable, normalReduction innerTerm)
  
 [<EntryPoint>]
-let main argv =
-    0 // return an integer exit code
+let main _ =
+    0
