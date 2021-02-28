@@ -20,32 +20,32 @@ let rec getNewVariableNotBelongingTo set =
     let newVariable = Guid.NewGuid()
     if Set.contains newVariable set then getNewVariableNotBelongingTo set else newVariable
     
-let rec substitution variableThatChanges substitutedTerm initialTerm =
+let rec substitute variableThatChanges substitutedTerm initialTerm =
     match initialTerm with
     | Variable variableInInitialTerm when variableInInitialTerm = variableThatChanges -> substitutedTerm
     | Variable _ -> initialTerm
-    | Application (firstTerm, secondTerm) -> Application (substitution variableThatChanges substitutedTerm firstTerm,
-                                                          substitution variableThatChanges substitutedTerm secondTerm)
+    | Application (firstTerm, secondTerm) -> Application (substitute variableThatChanges substitutedTerm firstTerm,
+                                                          substitute variableThatChanges substitutedTerm secondTerm)
     | Abstraction (variable, innerTerm) ->
         match substitutedTerm with
-        | Variable _ -> initialTerm
-        | _  when getSetOfFreeVariablesOf substitutedTerm |> Set.contains variable ||
-                  getSetOfFreeVariablesOf innerTerm |> Set.contains variableThatChanges ->
-            Abstraction (variable, substitution variableThatChanges substitutedTerm innerTerm)
+        | Variable variable when variable = variableThatChanges -> initialTerm
+        | _  when getSetOfFreeVariablesOf substitutedTerm |> Set.contains variable |> not ||
+                  getSetOfFreeVariablesOf innerTerm |> Set.contains variableThatChanges |> not ->
+            Abstraction (variable, substitute variableThatChanges substitutedTerm innerTerm)
         | _ -> let newVariable = getSetOfFreeVariablesOf innerTerm + getSetOfFreeVariablesOf substitutedTerm
                                  |> getNewVariableNotBelongingTo
                Abstraction (newVariable, innerTerm
-                                         |> substitution variable (Variable newVariable)
-                                         |> substitution variableThatChanges substitutedTerm)
+                                         |> substitute variable (Variable newVariable)
+                                         |> substitute variableThatChanges substitutedTerm)
 
-let rec normalReduction term =
+let rec applyNormalReduction term =
     match term with
     | Variable _ -> term
     | Application (firstTerm, secondTerm) ->
         match firstTerm with
-        | Abstraction (variable, innerTerm) -> substitution variable secondTerm innerTerm
-        | _ -> Application (normalReduction firstTerm, normalReduction secondTerm)
-    | Abstraction (variable, innerTerm) -> Abstraction (variable, normalReduction innerTerm)
+        | Abstraction (variable, innerTerm) -> applyNormalReduction <| substitute variable secondTerm innerTerm
+        | _ -> Application (applyNormalReduction firstTerm, applyNormalReduction secondTerm)
+    | Abstraction (variable, innerTerm) -> Abstraction (variable, applyNormalReduction innerTerm)
  
 [<EntryPoint>]
 let main _ =
