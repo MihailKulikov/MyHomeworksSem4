@@ -2,11 +2,13 @@
 
 open System
 
+/// Represents lambda term in lambda calculus.
 type LambdaTerm<'a> =
     | Variable of 'a
     | Application of LambdaTerm<'a> * LambdaTerm<'a>
     | Abstraction of 'a * LambdaTerm<'a>
     
+/// Gets set of free variables of the specified lambda term.
 let getSetOfFreeVariablesOf term =
     let rec loop acc term =
         match term with
@@ -16,10 +18,12 @@ let getSetOfFreeVariablesOf term =
     
     loop Set.empty term
     
+/// Generates new variable that does not belong to the specified set.
 let rec getNewVariableNotBelongingTo set =
     let newVariable = Guid.NewGuid()
     if Set.contains newVariable set then getNewVariableNotBelongingTo set else newVariable
     
+/// Substitutes of the specified substituted term for the specified variable in initial term.
 let rec substitute variableThatChanges substitutedTerm initialTerm =
     match initialTerm with
     | Variable variableInInitialTerm when variableInInitialTerm = variableThatChanges -> substitutedTerm
@@ -37,7 +41,7 @@ let rec substitute variableThatChanges substitutedTerm initialTerm =
                Abstraction (newVariable, innerTerm
                                          |> substitute variable (Variable newVariable)
                                          |> substitute variableThatChanges substitutedTerm)
-
+/// Applies beta-reduction according to the normal rule to the specified lambda term. 
 let rec applyNormalReduction term =
     match term with
     | Variable _ -> term
