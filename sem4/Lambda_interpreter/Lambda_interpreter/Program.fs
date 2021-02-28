@@ -7,35 +7,45 @@ type LambdaTerm<'a> =
     | Application of LambdaTerm<'a> * LambdaTerm<'a>
     | Abstraction of 'a * LambdaTerm<'a>
     
-let getSetOfFreeVariablesOf lambdaTerm =
-    let rec loop acc lambdaTerm =
-        match lambdaTerm with
-        | Variable variable -> acc |> Set.add variable
+let getSetOfFreeVariablesOf term =
+    let rec loop acc term =
+        match term with
+        | Variable variable -> Set.add variable acc
         | Application (firstTerm, secondTerm) -> (loop acc firstTerm) + (loop acc secondTerm)
-        | Abstraction (variable, innerTerm) -> (loop acc innerTerm) |> Set.remove variable
+        | Abstraction (variable, innerTerm) -> Set.remove variable <| loop acc innerTerm
     
-    loop Set.empty lambdaTerm
+    loop Set.empty term
     
 let rec getNewVariableNotBelongingTo set =
     let newVariable = Guid.NewGuid()
-    if set |> Set.contains newVariable then getNewVariableNotBelongingTo set else newVariable
+    if Set.contains newVariable set then getNewVariableNotBelongingTo set else newVariable
     
 let rec substitution variableThatChanges substitutedTerm initialTerm =
     match initialTerm with
     | Variable variableInInitialTerm when variableInInitialTerm = variableThatChanges -> substitutedTerm
     | Variable _ -> initialTerm
-    | Application (firstTerm, secondTerm) -> Application (firstTerm |> substitution variableThatChanges substitutedTerm,
-                                                          secondTerm |> substitution variableThatChanges substitutedTerm)
-    | Abstraction (variable, innerTerm)  ->
+    | Application (firstTerm, secondTerm) -> Application (substitution variableThatChanges substitutedTerm firstTerm,
+                                                          substitution variableThatChanges substitutedTerm secondTerm)
+    | Abstraction (variable, innerTerm) ->
         match substitutedTerm with
         | Variable _ -> initialTerm
         | _  when getSetOfFreeVariablesOf substitutedTerm |> Set.contains variable ||
                   getSetOfFreeVariablesOf innerTerm |> Set.contains variableThatChanges ->
-            Abstraction (variable, innerTerm |> substitution variableThatChanges substitutedTerm)
-        | _ -> let newVariable = getNewVariableNotBelongingTo (getSetOfFreeVariablesOf innerTerm + getSetOfFreeVariablesOf substitutedTerm)
+            Abstraction (variable, substitution variableThatChanges substitutedTerm innerTerm)
+        | _ -> let newVariable = getSetOfFreeVariablesOf innerTerm + getSetOfFreeVariablesOf substitutedTerm
+                                 |> getNewVariableNotBelongingTo
                Abstraction (newVariable, innerTerm
-                                         |> substitution variable (Variable (newVariable))
+                                         |> substitution variable (Variable newVariable)
                                          |> substitution variableThatChanges substitutedTerm)
+
+let rec normalReduction term =
+    match term with
+    | Variable _ -> term
+    | Application (firstTerm, secondTerm) ->
+        match firstTerm with
+        | Abstraction (variable, innerTerm) -> substitution variable secondTerm innerTerm
+        | _ -> Application (normalReduction firstTerm, normalReduction secondTerm)
+    | Abstraction (variable, innerTerm) -> Abstraction (variable, normalReduction innerTerm)
  
 [<EntryPoint>]
 let main argv =
