@@ -1,0 +1,11 @@
+\documentclass[16pt,a4paper]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\begin{document}
+
+\section{Beta-reduction}
+
+(($\lambda$a.($\lambda$b.b b) ($\lambda$b.b b)) b) (($\lambda$c.(c b)) ($\lambda$a.a))
+$\rightarrow_\beta$ (($\lambda$b.b b) ($\lambda$b.b b)) (($\lambda$c.(c b)) ($\lambda$a.a)) 
+$\rightarrow_\beta$ (($\lambda$b.b b) ($\lambda$b.b b)) b
+\end{document}
