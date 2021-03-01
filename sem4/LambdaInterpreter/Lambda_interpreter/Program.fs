@@ -23,7 +23,7 @@ let rec getNewVariableNotBelongingTo set =
     let newVariable = Guid.NewGuid()
     if Set.contains newVariable set then getNewVariableNotBelongingTo set else newVariable
     
-/// Substitutes of the specified substituted term for the specified variable in initial term.
+/// Substitutes of the specified substituted term for the specified variable in initial term in a capture-avoiding manner.
 let rec substitute variableThatChanges substitutedTerm initialTerm =
     match initialTerm with
     | Variable variableInInitialTerm when variableInInitialTerm = variableThatChanges -> substitutedTerm
