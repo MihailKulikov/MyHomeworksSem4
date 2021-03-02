@@ -41,6 +41,7 @@ let rec substitute variableThatChanges substitutedTerm initialTerm =
                Abstraction (newVariable, innerTerm
                                          |> substitute variable (Variable newVariable)
                                          |> substitute variableThatChanges substitutedTerm)
+
 /// Applies beta-reduction according to the normal rule to the specified lambda term. 
 let rec applyNormalReduction term =
     match term with

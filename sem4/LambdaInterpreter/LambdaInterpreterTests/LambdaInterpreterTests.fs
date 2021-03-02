@@ -70,8 +70,3 @@ type Tests () =
     [<Test>]
     member this.``Random tests`` () =
         Check.QuickThrowOnFailureAll<Properties>()
-        
-    
-        
-    
-        
