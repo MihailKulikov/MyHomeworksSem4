@@ -1,0 +1,14 @@
+\documentclass[16pt,a4paper]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\begin{document}
+
+\section{S K K}
+
+S K K = ($\lambda$x y z.x z (y z)) ($\lambda$x y.x) ($\lambda$x y.x)
+$\rightarrow_\beta$ ($\lambda$y z.($\lambda$x y.x) z (y z)) ($\lambda$x y.x)
+$\rightarrow_\beta$ ($\lambda$y z.($\lambda$y.z) (y z)) ($\lambda$x y.x)
+$\rightarrow_\beta$ ($\lambda$y z.z) ($\lambda$x y.x)
+$\rightarrow_\beta$ $\lambda$z.z = I
+
+\end{document}
