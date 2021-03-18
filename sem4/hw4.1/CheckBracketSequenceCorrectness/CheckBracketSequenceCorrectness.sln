@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CheckBracketSequenceCorrectness", "CheckBracketSequenceCorrectness\CheckBracketSequenceCorrectness.fsproj", "{C0A79298-94ED-4AB2-A25B-8DE86FB69CC2}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Tests", "Tests\Tests.fsproj", "{BE4451AB-DEDE-40F9-B156-820DEFB34320}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{C0A79298-94ED-4AB2-A25B-8DE86FB69CC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0A79298-94ED-4AB2-A25B-8DE86FB69CC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0A79298-94ED-4AB2-A25B-8DE86FB69CC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE4451AB-DEDE-40F9-B156-820DEFB34320}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE4451AB-DEDE-40F9-B156-820DEFB34320}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE4451AB-DEDE-40F9-B156-820DEFB34320}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE4451AB-DEDE-40F9-B156-820DEFB34320}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
