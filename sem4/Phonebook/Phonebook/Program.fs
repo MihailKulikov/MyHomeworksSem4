@@ -46,7 +46,7 @@ let getRecordString record =
 let getRecordsString records =
     records
     |> List.map getRecordString
-    |> List.fold (fun acc recordString -> acc + recordString) ""
+    |> List.reduce (fun first second -> first + second) 
 
 let saveToFile path records =
     use fileStream = new FileStream(path, FileMode.Create)
@@ -65,7 +65,7 @@ let tryPrintRecord recordOption =
     | Some(record) -> record |> getRecordString |> printf "%s\n"
     | None -> printf "%s\n" recordNotFoundMessage
         
-let executeAdd (request: string) records =
+let add (request: string) records =
     let input = request.Split([|" : "; " "|], StringSplitOptions.None).[1..]
     if Array.length input <> 2
     then
@@ -75,33 +75,55 @@ let executeAdd (request: string) records =
         let phoneNumber = input.[1]
         records |> addRecord {Name = name; PhoneNumber = phoneNumber} |> Some
     
-let executeFindByName (request: string) records =
+let findByName (request: string) records =
     let input = request.Split(' ')
     if Array.length input < 4
-    then
-        None
+    then None
     else
-        let name = input.[3..] |> Array.fold (fun acc partOfName -> acc + partOfName) ""
+        let name = input.[3..] |> Array.reduce (fun first second -> first + second)
         records |> findRecordByName name |> tryPrintRecord
         Some records
 
-let executeFindByPhoneNumber (request: string) records =
-    let phoneNumber = request.Split(' ') |> Array.last
-    records |> findRecordByName phoneNumber |> tryPrintRecord
+let findByPhoneNumber (request: string) records =
+    let input = request.Split(' ')
+    if Array.length input = 4
+    then None
+    else
+        let phoneNumber = Array.last input
+        records |> findRecordByName phoneNumber |> tryPrintRecord
+        Some records
     
-let executeSave (request: string) records =
-    let path = request.Split(' ') |> Array.last
-    records |> saveToFile path
+let save (request: string) records =
+    let input = request.Split(' ')
+    if Array.length input < 2
+    then None
+    else
+        let path = input.[1..] |> Array.reduce (fun first second -> first + second)
+        try
+            records |> saveToFile path
+            Some records
+        with
+            | _ -> None
 
-let executeRead (request: string) =
-    request.Split(' ') |> Array.last |> readFromFile
+let read (request: string) _ =
+    let input = request.Split(' ')
+    if Array.length input < 2
+    then None
+    else
+        let path = input.[1..] |> Array.reduce (fun first second -> first + second)
+        try
+            match readFromFile path with
+            | Some (newRecords) -> Some newRecords
+            | None -> None
+        with
+            | _ -> None
 
-let executeRequest execute request records =
-        match execute request records with
-            | Some (updatedRecords) -> updatedRecords
-            | None ->
-                printf "%s\n" "Incorrect command."
-                records
+let execute handler request records =
+    match handler request records with
+    | Some (updatedRecords) -> updatedRecords
+    | None ->
+        printf "%s\n" "Incorrect command."
+        records
 
 let startCli =
     printf "%s" introduceMessage
@@ -109,23 +131,18 @@ let startCli =
         match userInput with
         | exitRequest when  exitRequest = exitKey -> records
         | addRequest when addRequest.StartsWith(addKey) ->
-            records |> executeRequest executeAdd addRequest |> loop (Console.ReadLine())
+            records |> execute add addRequest |> loop (Console.ReadLine())
         | findByNameRequest when findByNameRequest.StartsWith(findByNameKey) ->
-            records |> executeRequest executeFindByName findByNameRequest |> loop (Console.ReadLine())
-        | findByPhoneRequest when findByPhoneRequest.StartsWith("Find by phone") ->
-            let phoneNumber = findByPhoneRequest.Split(' ') |> Array.last
-            records |> findRecordByPhoneNumber phoneNumber |> tryPrintRecord
-            loop (Console.ReadLine()) records
-        | getAllRequest when getAllRequest.StartsWith("Get all") ->
+            records |> execute findByName findByNameRequest |> loop (Console.ReadLine())
+        | findByPhoneRequest when findByPhoneRequest.StartsWith(findByPhoneKey) ->
+            records |> execute findByPhoneNumber findByPhoneRequest |> loop (Console.ReadLine())
+        | getAllRequest when getAllRequest = getAllKey ->
             records |> getRecordsString |> printf "%s\n"
             loop (Console.ReadLine()) records
-        | saveRequest when saveRequest.StartsWith("Save") ->
-            records |> executeSave saveRequest
-            loop (Console.ReadLine()) records
-        | readRequest when readRequest.StartsWith("Read") ->
-            match executeRead readRequest with
-            | Some (readRecords) -> loop (Console.ReadLine()) readRecords
-            | None -> loop (Console.ReadLine()) records
+        | saveRequest when saveRequest.StartsWith(saveKey) ->
+            records |> execute save saveRequest |> loop (Console.ReadLine())
+        | readRequest when readRequest.StartsWith(readKey) ->
+            records |> execute read readRequest |> loop (Console.ReadLine())
         | _ ->
             printf "%s" "Incorrect command.\n"
             loop (Console.ReadLine()) records
