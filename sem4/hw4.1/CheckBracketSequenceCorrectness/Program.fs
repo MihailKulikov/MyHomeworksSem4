@@ -1,6 +1,6 @@
 ﻿module Program
 
-// Checks the correctness of a sequence of brackets of the specified types.
+/// Checks the correctness of a sequence of brackets of the specified types.
 let check (bracketSequence: string) bracketsPairs =
     let containsElement pair bracket =
         fst pair = bracket || snd pair = bracket
