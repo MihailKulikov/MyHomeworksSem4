@@ -31,40 +31,43 @@ type Record =
         PhoneNumber: string;
     }
 
+/// Adds a new record to records.
 let addRecord newRecord records =
     newRecord :: records
 
+/// Finds all records with the specified name.
 let findRecordByName name records =
-    List.tryFind (fun record -> record.Name = name) records
-    
+    List.where (fun record -> record.Name = name) records
+
+/// Finds all records with the specified phone number.
 let findRecordByPhoneNumber phoneNumber records =
-    List.tryFind (fun record -> record.PhoneNumber = phoneNumber) records
-    
+    List.where (fun record -> record.PhoneNumber = phoneNumber) records
+
+/// Gets the string format of the specified record.
 let getRecordString record =
     $"{record.Name} : {record.PhoneNumber}"
 
+/// Gets the string format of specified records.
 let getRecordsString records =
     records
     |> List.map getRecordString
-    |> List.reduce (fun first second -> first + second) 
+    |> List.fold (fun first second -> first + second) ""
 
+/// Saves specified records to the file with the specified path in json format.
 let saveToFile path records =
     use fileStream = new FileStream(path, FileMode.Create)
     let json = JsonSerializer.SerializeToUtf8Bytes(records)
     fileStream.Write(json, 0, json.Length)
-    
+
+/// Reads records from the file with records in json format. 
 let readFromFile path =
     if File.Exists path
     then
         path |> File.ReadAllText |> JsonSerializer.Deserialize<Record array> |> Array.toList |> Some
     else
         None
-    
-let tryPrintRecord recordOption =
-    match recordOption with
-    | Some(record) -> record |> getRecordString |> printf "%s\n"
-    | None -> printf "%s\n" recordNotFoundMessage
-        
+
+/// Handles the add request for CLI.
 let add (request: string) records =
     let input = request.Split([|" : "; " "|], StringSplitOptions.None).[1..]
     if Array.length input <> 2
@@ -74,43 +77,47 @@ let add (request: string) records =
         let name = input.[0]
         let phoneNumber = input.[1]
         records |> addRecord {Name = name; PhoneNumber = phoneNumber} |> Some
-    
+
+/// Handles the find by name request for CLI. 
 let findByName (request: string) records =
     let input = request.Split(' ')
     if Array.length input < 4
     then None
     else
-        let name = input.[3..] |> Array.reduce (fun first second -> first + second)
-        records |> findRecordByName name |> tryPrintRecord
+        let name = input.[3..] |> Array.fold (fun first second -> first + second) ""
+        records |> findRecordByName name |> getRecordsString |> printf "%s"
         Some records
 
+/// Handles the find by phone number request for CLI.
 let findByPhoneNumber (request: string) records =
     let input = request.Split(' ')
-    if Array.length input = 4
+    if Array.length input <> 4
     then None
     else
         let phoneNumber = Array.last input
-        records |> findRecordByName phoneNumber |> tryPrintRecord
+        records |> findRecordByPhoneNumber phoneNumber |> getRecordsString |> printf "%s"
         Some records
-    
+
+/// Handles the save request for CLI.
 let save (request: string) records =
     let input = request.Split(' ')
     if Array.length input < 2
     then None
     else
-        let path = input.[1..] |> Array.reduce (fun first second -> first + second)
+        let path = input.[1..] |> Array.fold (fun first second -> first + second) ""
         try
             records |> saveToFile path
             Some records
         with
             | _ -> None
 
+/// Handles the read request for CLI.
 let read (request: string) _ =
     let input = request.Split(' ')
     if Array.length input < 2
     then None
     else
-        let path = input.[1..] |> Array.reduce (fun first second -> first + second)
+        let path = input.[1..] |> Array.fold (fun first second -> first + second) ""
         try
             match readFromFile path with
             | Some (newRecords) -> Some newRecords
@@ -118,6 +125,7 @@ let read (request: string) _ =
         with
             | _ -> None
 
+/// Executes the handler for the specified request. 
 let execute handler request records =
     match handler request records with
     | Some (updatedRecords) -> updatedRecords
@@ -125,6 +133,7 @@ let execute handler request records =
         printf "%s\n" "Incorrect command."
         records
 
+/// Starts CLI.
 let startCli =
     printf "%s" introduceMessage
     let rec loop userInput records =
@@ -147,7 +156,7 @@ let startCli =
             printf "%s" "Incorrect command.\n"
             loop (Console.ReadLine()) records
     loop (Console.ReadLine()) List.empty |> ignore
-        
+
 [<EntryPoint>]
 let main _ =
     startCli
