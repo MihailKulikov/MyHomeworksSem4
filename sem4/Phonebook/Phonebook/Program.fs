@@ -34,17 +34,17 @@ let getRecordString record =
 let getRecordsString records =
     records
     |> List.map getRecordString
-    |> List.fold (fun acc recordString -> acc + recordString + "\n") ""
+    |> List.fold (fun acc recordString -> acc + recordString) ""
 
 let saveToFile path records =
-    let fileStream = new FileStream(path, FileMode.Create)
+    use fileStream = new FileStream(path, FileMode.Create)
     let json = JsonSerializer.SerializeToUtf8Bytes(records)
     fileStream.Write(json, 0, json.Length)
     
 let readFromFile path =
     if File.Exists path
     then
-        path |> File.ReadAllText |> JsonSerializer.Deserialize |> unbox |> Some
+        path |> File.ReadAllText |> JsonSerializer.Deserialize<Record array> |> Array.toList |> Some
     else
         None
     
@@ -59,27 +59,27 @@ let startCli =
         match userInput with
         | exitCode when exitCode = "Exit" -> records
         | addCode when addCode.StartsWith("Add") ->
-            let input = addCode.Split([|" "; " : "|], StringSplitOptions.None).[1..]
+            let input = addCode.Split([|" : "; " "|], StringSplitOptions.None).[1..]
             let name = input.[0]
             let phoneNumber = input.[1]
             records |> addRecord {Name = name; PhoneNumber = phoneNumber} |> (loop <| Console.ReadLine())
         | findByNameCode when findByNameCode.StartsWith("Find by name") ->
-            let name = findByNameCode.Split(' ').[-1]
+            let name = findByNameCode.Split(' ') |> Array.last
             records |> findRecordByName name |> tryPrintRecord
             loop (Console.ReadLine()) records
         | findByPhoneCode when findByPhoneCode.StartsWith("Find by phone") ->
-            let phoneNumber = findByPhoneCode.Split(' ').[-1]
+            let phoneNumber = findByPhoneCode.Split(' ') |> Array.last
             records |> findRecordByPhoneNumber phoneNumber |> tryPrintRecord
             loop (Console.ReadLine()) records
         | getAllCode when getAllCode.StartsWith("Get all") ->
             records |> getRecordsString |> printf "%s\n"
             loop (Console.ReadLine()) records
         | saveCode when saveCode.StartsWith("Save") ->
-            let path = saveCode.Split(' ').[-1]
+            let path = saveCode.Split(' ') |> Array.last
             records |> saveToFile path
             loop (Console.ReadLine()) records
         | readCode when readCode.StartsWith("Read") ->
-            match readCode.Split(' ').[-1] |> readFromFile with
+            match readCode.Split(' ') |> Array.last |> readFromFile with
             | Some(readRecords) -> loop (Console.ReadLine()) readRecords
             | None ->
                 printf "%s" "File not found.\n"
