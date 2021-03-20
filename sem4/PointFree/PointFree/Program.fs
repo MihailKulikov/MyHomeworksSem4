@@ -1,9 +1,17 @@
-﻿let pointFul x l =
+﻿module Program
+
+let pointFul x l =
     List.map (fun y -> y * x) l
     
-let pointFree (x: int): int list -> int list = 
-    List.map ((*))
+let pointFul' x =
+    List.map (fun y -> y * x)
+    
+let pointFul'' x =
+    List.map ((*) x)
+
+let pointFree = 
+    (*) >> List.map
 
 [<EntryPoint>]
-let main argv =
+let main _ =
     0
