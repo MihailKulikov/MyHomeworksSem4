@@ -51,7 +51,7 @@ let getRecordString record =
 let getRecordsString records =
     records
     |> List.map getRecordString
-    |> List.fold (fun first second -> first + second) ""
+    |> List.fold (+) ""
 
 /// Saves specified records to the file with the specified path in json format.
 let saveToFile path records =
@@ -84,7 +84,7 @@ let findByName (request: string) records =
     if Array.length input < 4
     then None
     else
-        let name = input.[3..] |> Array.fold (fun first second -> first + second) ""
+        let name = input.[3..] |> Array.fold (+) ""
         records |> findRecordByName name |> getRecordsString |> printf "%s"
         Some records
 
@@ -104,7 +104,7 @@ let save (request: string) records =
     if Array.length input < 2
     then None
     else
-        let path = input.[1..] |> Array.fold (fun first second -> first + second) ""
+        let path = input.[1..] |> Array.fold (+) ""
         try
             records |> saveToFile path
             Some records
@@ -117,7 +117,7 @@ let read (request: string) _ =
     if Array.length input < 2
     then None
     else
-        let path = input.[1..] |> Array.fold (fun first second -> first + second) ""
+        let path = input.[1..] |> Array.fold (+) ""
         try
             match readFromFile path with
             | Some (newRecords) -> Some newRecords
