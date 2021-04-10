@@ -8,7 +8,6 @@ type Os =
 
 /// Represents computer in the local network.
 type Computer =
-    abstract member Os: Os
     abstract member TryToGetInfected: unit -> unit
     abstract member IsInfected: bool
     abstract member ProbabilityOfInfection: float 

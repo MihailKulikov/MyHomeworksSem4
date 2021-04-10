@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LocalNetwork", "LocalNetwork\LocalNetwork.fsproj", "{6FAF27C1-8067-4AE3-9798-2C8CD9DBF4E0}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LocalNetworkTests", "LocalNetworkTests\LocalNetworkTests.fsproj", "{294A21DF-8510-4728-A44D-9B5C2F0B0682}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{6FAF27C1-8067-4AE3-9798-2C8CD9DBF4E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FAF27C1-8067-4AE3-9798-2C8CD9DBF4E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FAF27C1-8067-4AE3-9798-2C8CD9DBF4E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{294A21DF-8510-4728-A44D-9B5C2F0B0682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{294A21DF-8510-4728-A44D-9B5C2F0B0682}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{294A21DF-8510-4728-A44D-9B5C2F0B0682}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{294A21DF-8510-4728-A44D-9B5C2F0B0682}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

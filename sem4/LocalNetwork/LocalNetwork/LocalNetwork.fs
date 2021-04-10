@@ -3,9 +3,7 @@
 open System.Collections.Generic
 
 /// Represents the local network.
-type LocalNetwork(adjacencyMap: IDictionary<Computer, Computer list>) =
-    let computers = Seq.toList adjacencyMap.Keys
-
+type LocalNetwork(computers: Computer list, adjacencyMap: IDictionary<Computer, Computer list>) =
     let canThisComputerBeInfected (computer: Computer) =
         computer.IsInfected = false && computer.ProbabilityOfInfection > 0.0
 
