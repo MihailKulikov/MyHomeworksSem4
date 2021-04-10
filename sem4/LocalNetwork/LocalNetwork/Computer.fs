@@ -10,4 +10,4 @@ type Os =
 type Computer =
     abstract member TryToGetInfected: unit -> unit
     abstract member IsInfected: bool
-    abstract member ProbabilityOfInfection: float 
+    abstract member ProbabilityOfInfection: float

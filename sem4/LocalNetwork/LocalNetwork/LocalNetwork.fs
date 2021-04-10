@@ -15,9 +15,9 @@ type LocalNetwork(computers: Computer list, adjacencyMap: IDictionary<Computer, 
         List.iter (fun (neighbour: Computer) -> neighbour.TryToGetInfected()) adjacencyMap.[computer]
     
     /// Returns true if the state of the local network can change; false otherwise.
-    member this.IsEndOfSimulation () = List.exists canThisComputerInfect computers
+    member this.IsEndOfSimulation () = List.exists canThisComputerInfect computers |> not
 
     /// Makes step in the simulation.
     member this.MakeStep () =
-        List.iter tryInfectNeighboursOf computers
+        computers |> List.filter canThisComputerInfect |>  List.iter tryInfectNeighboursOf
         List.map (fun (computer: Computer) -> computer.IsInfected) computers
