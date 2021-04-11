@@ -5,11 +5,10 @@ open System.Collections.Generic
 /// Represents the local network.
 type LocalNetwork(computers: Computer list, adjacencyMap: IDictionary<Computer, Computer list>) =
     let canThisComputerBeInfected (computer: Computer) =
-        computer.IsInfected = false && computer.ProbabilityOfInfection > 0.0
+        not computer.IsInfected && computer.ProbabilityOfInfection > 0.0
 
     let canThisComputerInfect (computer: Computer) =
-        computer.IsInfected = true
-        && List.exists canThisComputerBeInfected adjacencyMap.[computer]
+        computer.IsInfected && List.exists canThisComputerBeInfected adjacencyMap.[computer]
         
     let tryInfectNeighboursOf (computer: Computer) =
         List.iter (fun (neighbour: Computer) -> neighbour.TryToGetInfected()) adjacencyMap.[computer]
