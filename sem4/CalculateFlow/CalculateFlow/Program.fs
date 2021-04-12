@@ -1,4 +1,6 @@
-﻿open System  
+﻿module Program
+
+open System  
 
 type CalculateBuilder() =
     member this.Bind(x, f) =
