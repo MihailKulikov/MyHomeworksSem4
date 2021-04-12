@@ -2,6 +2,7 @@
 
 open System  
 
+/// Builder for calculate flow.
 type CalculateBuilder() =
     member this.Bind(x, f) =
         match Int32.TryParse(x: string) with
