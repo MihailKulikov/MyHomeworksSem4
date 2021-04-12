@@ -8,6 +8,11 @@ type Os =
 
 /// Represents computer in the local network.
 type Computer =
+    /// Tries to get infected.
     abstract member TryToGetInfected: unit -> unit
+    
+    /// Returns true, if this computer is infected; false, otherwise.
     abstract member IsInfected: bool
+    
+    /// Probability of getting infected.
     abstract member ProbabilityOfInfection: float
