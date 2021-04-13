@@ -13,7 +13,8 @@ environment:
   - solution_name: sem4\hw2.3\hw2.3.sln
   - solution_name: sem4\hw2.4\hw2.4.sln
   - solution_name: sem4\LambdaInterpreter\LambdaInterpreter.sln
-  
+  - solution_name: sem4\RoundWorkflow\RoundWorkflow.sln  
+
 build_script:
   - msbuild %solution_name%
 
