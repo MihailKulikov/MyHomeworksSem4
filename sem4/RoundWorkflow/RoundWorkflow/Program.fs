@@ -2,6 +2,8 @@
 
 open System
 
+/// Represents builder for rounding flow.
+/// All calculations in it are rounded to the specified number of decimal places.
 type RoundBuilder(digits: int) =
     member this.Bind(x: double, f) =
         Math.Round(x, digits) |> f
