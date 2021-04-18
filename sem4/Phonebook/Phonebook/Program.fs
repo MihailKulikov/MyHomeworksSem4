@@ -36,22 +36,17 @@ let addRecord newRecord records =
     newRecord :: records
 
 /// Finds all records with the specified name.
-let findRecordByName name records =
-    List.where (fun record -> record.Name = name) records
+let findRecordByName name = List.filter (fun record -> record.Name = name)
 
 /// Finds all records with the specified phone number.
-let findRecordByPhoneNumber phoneNumber records =
-    List.where (fun record -> record.PhoneNumber = phoneNumber) records
+let findRecordByPhoneNumber phoneNumber = List.filter (fun record -> record.PhoneNumber = phoneNumber)
 
 /// Gets the string format of the specified record.
 let getRecordString record =
     $"{record.Name} : {record.PhoneNumber}"
 
 /// Gets the string format of specified records.
-let getRecordsString records =
-    records
-    |> List.map getRecordString
-    |> List.fold (+) ""
+let getRecordsString = List.map getRecordString >> List.fold (fun acc recordString -> acc + "\n" + recordString) ""
 
 /// Saves specified records to the file with the specified path in json format.
 let saveToFile path records =
@@ -106,7 +101,7 @@ let save (request: string) records =
     else
         let path = input.[1..] |> Array.fold (+) ""
         try
-            records |> saveToFile path
+            saveToFile path records
             Some records
         with
             | _ -> None
@@ -120,7 +115,7 @@ let read (request: string) _ =
         let path = input.[1..] |> Array.fold (+) ""
         try
             match readFromFile path with
-            | Some (newRecords) -> Some newRecords
+            | Some newRecords -> Some newRecords
             | None -> None
         with
             | _ -> None
@@ -128,14 +123,14 @@ let read (request: string) _ =
 /// Executes the handler for the specified request. 
 let execute handler request records =
     match handler request records with
-    | Some (updatedRecords) -> updatedRecords
+    | Some updatedRecords -> updatedRecords
     | None ->
         printf "%s\n" "Incorrect command."
         records
 
 /// Starts CLI.
-let startCli =
-    printf "%s" introduceMessage
+let startCli () =
+    printf $"%s{introduceMessage}"
     let rec loop userInput records =
         match userInput with
         | exitRequest when  exitRequest = exitKey -> records
@@ -159,5 +154,5 @@ let startCli =
 
 [<EntryPoint>]
 let main _ =
-    startCli
+    startCli ()
     0

@@ -36,14 +36,6 @@ type Tests() =
         Check.QuickThrowOnFailure property
     
     [<Test>]
-    member this.``Get records string`` () =
-        let property (records: Record list) =
-            records
-            |> List.map getRecordString
-            |> List.fold (fun first second -> first + second) "" = getRecordsString records
-        Check.QuickThrowOnFailure property
-    
-    [<Test>]
     member this.``Save to file`` () =
         let testPath = "test.txt"
         let records = [{Name = "kek"; PhoneNumber = "42"}]
@@ -121,7 +113,7 @@ type Tests() =
     [<Test>]
     member this.``Update records if handler returns Some`` () =
         let handler _ _ = Some []
-        execute handler "kek" [{Name="kek"; PhoneNumber="Something"}] |> should equal []
+        execute handler "kek" [{Name="kek"; PhoneNumber="Something"}] |> should be Empty
         
     [<Test>]
     member this.``Should not update records if handler returns None`` () =
