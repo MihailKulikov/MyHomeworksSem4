@@ -6,30 +6,43 @@ open NUnit.Framework
 open FsUnit
 open Foq
 
+let getOs (probabilityOfInfection: float) =
+    Mock<Os>()
+        .Setup(fun os -> <@ os.ProbabilityOfInfection @>)
+        .Returns(probabilityOfInfection)
+        .Create()
+
 type VulnerableComputer() =
     let mutable isInfected = false
     interface Computer with
-        member this.ProbabilityOfInfection = 1.0
-        member this.TryToGetInfected () = isInfected <- true
+        member this.Os = getOs 1.0
+        member this.TryToGetInfected() = isInfected <- true
         member this.IsInfected
             with get() = isInfected
+
+        member this.CanThisComputerBeInfected = not isInfected
 
 type ProtectedComputer() =
     let mutable isInfected = false
     interface Computer with
-        member this.ProbabilityOfInfection = 0.0
+        member this.Os = getOs 0.0
         member this.TryToGetInfected () = ()
         member this.IsInfected
             with get() = isInfected
 
-let getInfectedComputer () = Mock<Computer>()
-                               .Setup(fun computer -> <@ computer.IsInfected @>)
-                               .Returns(true)
-                               .Setup(fun computer -> <@ computer.ProbabilityOfInfection @>)
-                               .Returns(0.0)
-                               .Setup(fun computer -> <@ computer.TryToGetInfected() @>)
-                               .Returns(())
-                               .Create()
+        member this.CanThisComputerBeInfected = false
+
+let getInfectedComputer () =
+    Mock<Computer>()
+        .Setup(fun computer -> <@ computer.IsInfected @>)
+        .Returns(true)
+        .Setup(fun computer -> <@ computer.Os @>)
+        .Returns(getOs(0.0))
+        .Setup(fun computer -> <@ computer.TryToGetInfected() @>)
+        .Returns(())
+        .Create()
+    
+                               
 
 [<Test>]
 let ``Simulation should work like BFS if all probabilities equal to one.`` () =

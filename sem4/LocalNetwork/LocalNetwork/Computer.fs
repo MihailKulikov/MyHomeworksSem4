@@ -2,9 +2,9 @@
 
 /// Possible types of operating systems in the local network. 
 type Os =
-    | Windows = 0
-    | Linux = 1
-    | MacOs = 2
+    /// Probability of getting infected.
+    abstract member ProbabilityOfInfection: float
+    
 
 /// Represents computer in the local network.
 type Computer =
@@ -14,5 +14,8 @@ type Computer =
     /// Returns true, if this computer is infected; false, otherwise.
     abstract member IsInfected: bool
     
-    /// Probability of getting infected.
-    abstract member ProbabilityOfInfection: float
+    // Check if this computer can be infected.
+    abstract member CanThisComputerBeInfected: bool
+    
+    // Os of this computer.
+    abstract member Os: Os
