@@ -18,7 +18,7 @@ let asyncGetHtmlStringFrom (url:string) =
 
 /// Gets all urls from the given html document.
 let getAllUrlsFrom htmlString =
-    let pattern = """\s*(?i)href\s*=\s*(\"(http[^"]*)\"|'[^']*'|([^'">\s]+))"""
+    let pattern = """\s*(?i)href\s*=\s*(\"(http[^"]*)\")"""
     (Regex.Matches(htmlString, pattern))
     |> Seq.map (fun regMatch  -> regMatch.Groups.[2].Value)
     |> Seq.filter (fun url -> url <> "")
