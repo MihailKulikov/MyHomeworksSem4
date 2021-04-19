@@ -1,42 +1,37 @@
 ﻿module Program
 
 /// Checks the correctness of a sequence of brackets of the specified types.
-let check (bracketSequence: string) bracketsPairs =
-    let containsElement pair bracket =
-        fst pair = bracket || snd pair = bracket
-    let bracketToPair bracket =
-        bracketsPairs |> List.find (fun pair -> containsElement pair bracket) 
-    let isLeft bracket =
-        (bracket |> bracketToPair |> fst) = bracket 
-    let rec loop (bracketSequence: string) bracketPairToCountMap =
-        if bracketSequence.Length = 0
-        then
-            bracketPairToCountMap
-        else
-            let currentBracket = bracketSequence.[0]
-            let diff = if currentBracket |> isLeft then 1 else -1
-            bracketPairToCountMap
-            |> Map.change (bracketToPair currentBracket) (fun oldValue ->
-                match oldValue with
-                | Some(count) when count >= 0 -> Some (count + diff)
-                | Some(count) -> Some (count)
-                | None -> None)
-            |> loop bracketSequence.[1..]
-    if bracketSequence
-       |> Seq.forall (fun bracket -> bracketsPairs |> List.exists (fun pair -> containsElement pair bracket)) |> not
-    then
+let check (bracketSequence: string) (bracketPairs: (char * char) list) =
+    let leftToRightMap = Map.ofList bracketPairs
+    let rightToLeftMap = bracketPairs |> List.map (fun (left, right) -> right, left) |> Map.ofList
+    let rec loop stack (bracketSequence: string) =
+        match stack with
+        | [] ->
+            if bracketSequence.Length = 0 then true
+            else
+                if Map.containsKey bracketSequence.[0] leftToRightMap then
+                    loop [bracketSequence.[0]] bracketSequence.[1..]
+                else
+                    false
+        | head :: tail ->
+            if bracketSequence.Length = 0 then false
+            else
+                if Map.containsKey bracketSequence.[0] leftToRightMap then
+                    loop (bracketSequence.[0] :: head :: tail) bracketSequence.[1..]
+                else
+                    if rightToLeftMap.[bracketSequence.[0]] <> head then false
+                    else loop tail bracketSequence.[1..]
+    let getKeys = Map.toSeq >> Seq.map fst >> Set.ofSeq
+    let intersection = leftToRightMap |> getKeys |> Set.intersect (getKeys rightToLeftMap)
+    let union = leftToRightMap |> getKeys |> Set.union (getKeys rightToLeftMap)
+    if Set.count intersection = 0 && Seq.exists (fun char -> Set.contains char union |> not) bracketSequence then
         None
     else
-        bracketsPairs
-        |> List.map (fun pair -> (pair, 0))
-        |> Map.ofList
-        |> loop bracketSequence
-        |> Map.forall (fun _ count -> count = 0)
-        |> Some
+        loop [] bracketSequence |> Some
 
 [<EntryPoint>]
 let main _ =
     match check "((())){}" ['(', ')'; '}', '{' ] with
-    | Some(result) -> printfn "%A" result
+    | Some(result) -> printfn $"%A{result}"
     | None -> printfn "Something goes wrong."
     0
