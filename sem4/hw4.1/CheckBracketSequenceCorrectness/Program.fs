@@ -1,7 +1,7 @@
 ﻿module Program
 
 /// Checks the correctness of a sequence of brackets of the specified types.
-let check (bracketSequence: string) (bracketPairs: (char * char) list) =
+let check (bracketSequence: string) bracketPairs =
     let leftToRightMap = Map.ofList bracketPairs
     let rightToLeftMap = bracketPairs |> List.map (fun (left, right) -> right, left) |> Map.ofList
     let rec loop stack (bracketSequence: string) =
