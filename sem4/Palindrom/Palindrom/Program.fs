@@ -1,4 +1,4 @@
-﻿open System
+﻿module Program
 
 let combinations size set =
     let rec loop acc size set = seq {
@@ -14,12 +14,12 @@ let isPalindrome number =
     let stringRepresentation = number.ToString().ToCharArray()
     stringRepresentation = Array.rev stringRepresentation
     
-let findPairForMaxPalindrome() =
+let findMaxPalindrome() =
     let combinationsWithRepetition = Seq.init 900 (fun i -> [i + 100; i + 100])
                                      |> Seq.append <| combinations 2 [100..999]
     combinationsWithRepetition |> Seq.map (fun pair -> pair.[0] * pair.[1]) |> Seq.filter isPalindrome |> Seq.max
 
 [<EntryPoint>]
 let main _ =
-    printf $"%A{findPairForMaxPalindrome()}"
+    printf $"%A{findMaxPalindrome()}"
     0
