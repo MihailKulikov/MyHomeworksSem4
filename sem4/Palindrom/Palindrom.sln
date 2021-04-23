@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Palindrom", "Palindrom\Palindrom.fsproj", "{D41FE553-C5C9-4CC5-BB84-802110F9FEEB}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Tests", "Tests\Tests.fsproj", "{F92744D0-B104-4C26-9ECF-98D2D56D709B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D41FE553-C5C9-4CC5-BB84-802110F9FEEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D41FE553-C5C9-4CC5-BB84-802110F9FEEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D41FE553-C5C9-4CC5-BB84-802110F9FEEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D41FE553-C5C9-4CC5-BB84-802110F9FEEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F92744D0-B104-4C26-9ECF-98D2D56D709B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F92744D0-B104-4C26-9ECF-98D2D56D709B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F92744D0-B104-4C26-9ECF-98D2D56D709B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F92744D0-B104-4C26-9ECF-98D2D56D709B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
